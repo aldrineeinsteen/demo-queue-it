@@ -1,4 +1,5 @@
 variable "linode_token" {
-  description = "Token for Linode provider"
   type        = string
+  description = "Linode API token for authentication"
+  sensitive   = true
 }

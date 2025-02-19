@@ -1,4 +1,4 @@
-name: Build & Push Producer Image
+name: Build & Push Producer to GHCR
 
 on:
   push:
@@ -7,6 +7,10 @@ on:
     paths:
       - "producer/**"
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,11 +18,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Login to GHCR
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+      - name: Login to GitHub Container Registry
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GITHUB_TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build & Push Image
         run: |
-          cd producer/
-          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/queue-producer:latest .
-          docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/queue-producer:latest
+          docker build -t ghcr.io/${{ github.actor }}/queue-producer:latest ./producer
+          docker push ghcr.io/${{ github.actor }}/queue-producer:latest
