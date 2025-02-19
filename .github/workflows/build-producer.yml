@@ -1,0 +1,24 @@
+name: Build & Push Producer Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "producer/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+
+      - name: Build & Push Image
+        run: |
+          cd producer/
+          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/queue-producer:latest .
+          docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/queue-producer:latest
