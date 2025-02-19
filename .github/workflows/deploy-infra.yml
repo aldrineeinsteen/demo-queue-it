@@ -18,7 +18,10 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init & Apply
+        env:
+          TF_VAR_linode_token: ${{ secrets.LINODE_TOKEN }}  # Pass Linode token as an environment variable
         run: |
           cd iac/
           terraform init
+          terraform plan
           terraform apply -auto-approve
