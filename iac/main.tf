@@ -27,6 +27,17 @@ output "kubeconfig" {
   value     = module.lke.kubeconfig
   sensitive = true
 }
+
+module "namespace" {
+  source = "./modules/namespace"
+  namespace = "mc-system"
+}
+
+module "storage" {
+  source    = "./modules/storage"
+  region = "gb-lon"
+  namespace = module.namespace.namespace_name
+}
 provider "kubernetes" {
   config_path = pathexpand("~/.kube/config")
 }

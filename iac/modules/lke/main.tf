@@ -18,9 +18,12 @@ resource "linode_lke_cluster" "this" {
 }
 
 resource "local_file" "kubeconfig" {
+  # filename = "${path.module}/kubeconfig"
+  content  = base64decode(linode_lke_cluster.this.kubeconfig)
   filename = "${path.module}/kubeconfig"
-  content  = linode_lke_cluster.this.kubeconfig
 }
+
+
 
 output "kubeconfig_path" {
   value = local_file.kubeconfig.filename
