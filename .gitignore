@@ -73,3 +73,6 @@ venv.bak/
 # Ignore system-dependent IDE/workspace settings
 .vscode/
 .idea/
+
+# Ignore the license file
+iac/license/**

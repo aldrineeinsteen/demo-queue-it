@@ -16,5 +16,5 @@ resource "kubernetes_namespace" "mc_system" {
 }
 
 provider "kubernetes" {
-  config_path = "${path.root}/modules/lke/kubeconfig"
+  config_path = var.kubeconfig
 }

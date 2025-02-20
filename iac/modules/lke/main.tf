@@ -23,8 +23,6 @@ resource "local_file" "kubeconfig" {
   filename = "${path.module}/kubeconfig"
 }
 
-
-
 output "kubeconfig_path" {
   value = local_file.kubeconfig.filename
 }

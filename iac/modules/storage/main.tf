@@ -70,5 +70,5 @@ resource "kubernetes_persistent_volume_claim" "mc_pvc" {
 }
 
 provider "kubernetes" {
-  config_path = "${path.root}/modules/lke/kubeconfig"
+  config_path = var.kubeconfig
 }

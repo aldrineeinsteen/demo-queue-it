@@ -20,7 +20,7 @@ module "lke" {
   k8s_version   = "1.32"
   region        = "gb-lon"
   node_type     = "g6-dedicated-16"
-  node_count    = 1
+  node_count    = 3
 }
 
 output "kubeconfig" {
@@ -29,15 +29,43 @@ output "kubeconfig" {
 }
 
 module "namespace" {
-  source = "./modules/namespace"
+  source    = "./modules/namespace"
   namespace = "mc-system"
+  kubeconfig = module.lke.kubeconfig
+  lke_dependency = module.lke
 }
 
 module "storage" {
   source    = "./modules/storage"
-  region = "gb-lon"
+  region    = "gb-lon"
   namespace = module.namespace.namespace_name
+  kubeconfig = module.lke.kubeconfig
 }
+
+module "kots" {
+  source     = "./modules/kots"
+  kubeconfig = module.lke.kubeconfig
+}
+
+module "service_account" {
+  source    = "./modules/service_account"
+  namespace = module.namespace.namespace_name
+  kubeconfig = module.lke.kubeconfig
+}
+
+module "license" {
+  source    = "./modules/mc_license"
+  namespace = module.namespace.namespace_name
+  kubeconfig = module.lke.kubeconfig
+}
+
+module "mc" {
+  source = "./modules/mission-control"
+  namespace = module.namespace.namespace_name
+  admin_password = "password"
+  kubeconfig = module.lke.kubeconfig
+}
+
 provider "kubernetes" {
   config_path = pathexpand("~/.kube/config")
 }
