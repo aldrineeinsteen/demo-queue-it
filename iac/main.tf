@@ -29,16 +29,16 @@ output "kubeconfig" {
 }
 
 module "namespace" {
-  source    = "./modules/namespace"
-  namespace = "mc-system"
-  kubeconfig = module.lke.kubeconfig
+  source         = "./modules/namespace"
+  namespace      = "mc-system"
+  kubeconfig     = module.lke.kubeconfig
   lke_dependency = module.lke
 }
 
 module "storage" {
-  source    = "./modules/storage"
-  region    = "gb-lon"
-  namespace = module.namespace.namespace_name
+  source     = "./modules/storage"
+  region     = "gb-lon"
+  namespace  = module.namespace.namespace_name
   kubeconfig = module.lke.kubeconfig
 }
 
@@ -48,22 +48,28 @@ module "kots" {
 }
 
 module "service_account" {
-  source    = "./modules/service_account"
-  namespace = module.namespace.namespace_name
+  source     = "./modules/service_account"
+  namespace  = module.namespace.namespace_name
   kubeconfig = module.lke.kubeconfig
 }
 
 module "license" {
-  source    = "./modules/mc_license"
-  namespace = module.namespace.namespace_name
+  source     = "./modules/mc_license"
+  namespace  = module.namespace.namespace_name
+  kubeconfig = module.lke.kubeconfig
+}
+
+module "stateful-set" {
+  source     = "./modules/stateful-set"
+  namespace  = module.namespace.namespace_name
   kubeconfig = module.lke.kubeconfig
 }
 
 module "mc" {
-  source = "./modules/mission-control"
-  namespace = module.namespace.namespace_name
+  source         = "./modules/mission-control"
+  namespace      = module.namespace.namespace_name
   admin_password = "password"
-  kubeconfig = module.lke.kubeconfig
+  kubeconfig     = module.lke.kubeconfig
 }
 
 provider "kubernetes" {

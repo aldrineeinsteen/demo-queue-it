@@ -1,0 +1,29 @@
+apiVersion: kots.io/v1beta1
+kind: ConfigValues
+metadata:
+  name: mission-control
+  namespace: mission-control
+spec:
+  values:
+    controlPlaneMode:
+      value: "control-plane"  # Or "data-plane"
+    storageBackend:
+      value: "s3"  # Change based on your storage (e.g., "s3", "local")
+    enableDatabaseWorkers:
+      value: "true"
+    enableHttps:
+      value: "false"  # Set to "true" if using HTTPS
+    s3Endpoint:
+      value: "https://us-east-1.linodeobjects.com"
+    s3Bucket:
+      value: "mission-control"
+    s3AccessKey:
+      value: "S5D2NIWCMRFU78S4OZVB"
+    s3SecretKey:
+      value: "uYbhJ6KRQqVA6Xk3rI15ggNjMDQC3kkzJuKxpGRU"
+    s3Region:
+      value: "us-east-1"
+    s3Permissions:
+      value: "read_write"
+    storageClass:
+      value: "linode-block-storage-retain"
